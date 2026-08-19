@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LitApp Web</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">L</div>
+          <div>
+            <h1>LitApp</h1>
+            <p>Read • Connect • Progress • Earn</p>
+          </div>
+        </div>
+
+        <nav class="nav" id="desktop-nav">
+          <button class="nav-item active" data-section="home">Home</button>
+          <button class="nav-item" data-section="clubs">Clubs</button>
+          <button class="nav-item" data-section="reading">Reading</button>
+          <button class="nav-item" data-section="ranking">Rankings</button>
+          <button class="nav-item" data-section="challenges">Challenges</button>
+          <button class="nav-item" data-section="calendar">Calendar</button>
+          <button class="nav-item" data-section="rewards">Rewards</button>
+          <button class="nav-item" data-section="profile">Profile</button>
+        </nav>
+
+        <div class="sidebar-card">
+          <span class="eyebrow">Your club rhythm</span>
+          <strong>2 active readings</strong>
+          <p>Only books from clubs you belong to are shown.</p>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div>
+            <span class="eyebrow">Good morning, Bianca</span>
+            <h2>Ready to read something new?</h2>
+          </div>
+          <div class="topbar-actions">
+            <label class="search">
+              <span>⌕</span>
+              <input id="search" type="search" placeholder="Search clubs, books, challenges..." />
+            </label>
+            <button class="primary-btn" id="sign-in-btn">Update progress</button>
+          </div>
+        </header>
+
+        <section id="home-grid" class="hero-grid">
+          <div class="card hero-card">
+            <div class="card-header">
+              <div>
+                <span class="eyebrow">Current reading</span>
+                <h3>Tomorrow, and Tomorrow, and Tomorrow</h3>
+              </div>
+              <span class="pill accent">67%</span>
+            </div>
+            <div class="book-row">
+              <div class="book-cover cover-purple">
+                <span>Tomorrow</span>
+                <strong>Gabrielle Zevin</strong>
+              </div>
+              <div class="card-body">
+                <p class="muted">Lithappened</p>
+                <div class="meta">268 / 400 pages • 12 days remaining</div>
+                <div class="progress"><div style="width:67%"></div></div>
+                <div class="button-row">
+                  <button class="primary-btn" id="open-reading">Update progress</button>
+                  <button class="secondary-btn" data-scroll="clubs">View club</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card hero-card">
+            <div class="card-header">
+              <div>
+                <span class="eyebrow">Club progress</span>
+                <h3>Lithappened</h3>
+              </div>
+              <span class="pill">72%</span>
+            </div>
+            <p class="muted">The Midnight Library</p>
+            <div class="mini-stats">
+              <div><strong>12</strong><span>members</span></div>
+              <div><strong>7</strong><span>finished</span></div>
+            </div>
+            <div class="progress soft"><div style="width:72%"></div></div>
+          </div>
+
+          <div class="card hero-card">
+            <div class="card-header">
+              <div>
+                <span class="eyebrow">Ranking</span>
+                <h3>#3 this month</h3>
+              </div>
+              <span class="pill accent">880 pts</span>
+            </div>
+            <ul class="leaderboard-mini">
+              <li><strong>Luna</strong><span>920</span></li>
+              <li><strong>Clara</strong><span>870</span></li>
+              <li><strong>You</strong><span>880</span></li>
+            </ul>
+          </div>
+
+          <div class="card hero-card">
+            <div class="card-header">
+              <div>
+                <span class="eyebrow">Current challenge</span>
+                <h3>Read 500 pages in September</h3>
+              </div>
+            </div>
+            <p class="muted">320 / 500 pages • +200 points</p>
+            <div class="progress warm"><div style="width:64%"></div></div>
+          </div>
+        </section>
+
+        <section id="page-root" class="page-root is-hidden"></section>
+
+        <section id="sections" class="content-grid">
+          <div class="stack">
+            <section class="card section-card" data-section-panel="clubs">
+              <div class="card-header">
+                <div>
+                  <span class="eyebrow">Clubs</span>
+                  <h3>Discover communities</h3>
+                </div>
+                <button class="secondary-btn">Create club</button>
+              </div>
+              <div class="grid clubs-grid" id="clubs-grid"></div>
+            </section>
+
+            <section class="card section-card" data-section-panel="selection">
+              <div class="card-header">
+                <div>
+                  <span class="eyebrow">Book selection</span>
+                  <h3>Voting and draw</h3>
+                </div>
+              </div>
+              <div class="grid selection-grid" id="selection-panel"></div>
+            </section>
+
+            <section class="card section-card" data-section-panel="reading">
+              <div class="card-header">
+                <div>
+                  <span class="eyebrow">Reading</span>
+                  <h3>Active club reads only</h3>
+                </div>
+              </div>
+              <div class="reading-list" id="reading-list"></div>
+            </section>
+
+            <section class="card section-card" data-section-panel="ranking">
+              <div class="card-header">
+                <div>
+                  <span class="eyebrow">Rankings</span>
+                  <h3>Monthly, yearly, all time</h3>
+                </div>
+                <div class="tab-strip">
+                  <button class="tab active" data-rank-tab="month">MONTH</button>
+                  <button class="tab" data-rank-tab="year">YEAR</button>
+                  <button class="tab" data-rank-tab="all">ALL TIME</button>
+                </div>
+              </div>
+              <div id="ranking-list"></div>
+            </section>
+
+            <section class="card section-card" data-section-panel="challenges">
+              <div class="card-header">
+                <div>
+                  <span class="eyebrow">Challenges</span>
+                  <h3>Active, completed, upcoming</h3>
+                </div>
+              </div>
+              <div class="grid challenge-grid" id="challenge-grid"></div>
+            </section>
+
+            <section class="card section-card" data-section-panel="calendar">
+              <div class="card-header">
+                <div>
+                  <span class="eyebrow">Calendar</span>
+                  <h3>Cozy event board</h3>
+                </div>
+              </div>
+              <div class="calendar-layout">
+                <div class="calendar" id="calendar"></div>
+                <div class="calendar-detail" id="calendar-detail"></div>
+              </div>
+            </section>
+
+            <section class="card section-card" data-section-panel="rewards">
+              <div class="card-header">
+                <div>
+                  <span class="eyebrow">Rewards</span>
+                  <h3>Non-monetary store</h3>
+                </div>
+                <span class="pill accent" id="points-balance">880 points</span>
+              </div>
+              <div class="grid rewards-grid" id="rewards-grid"></div>
+            </section>
+
+            <section class="card section-card" data-section-panel="profile">
+              <div class="card-header">
+                <div>
+                  <span class="eyebrow">Profile</span>
+                  <h3>Bianca Vale</h3>
+                </div>
+              </div>
+              <div class="profile-layout" data-action="open-profile">
+                <div class="profile-hero">
+                  <div class="avatar big">BV</div>
+                  <div>
+                    <p class="muted">@biancavale</p>
+                    <p>Level 12 • 1,240 / 1,500 XP • 880 points</p>
+                    <div class="progress soft"><div style="width:83%"></div></div>
+                  </div>
+                </div>
+                <div class="profile-stats">
+                  <div class="stat"><strong>37</strong><span>books read</span></div>
+                  <div class="stat"><strong>12,840</strong><span>pages read</span></div>
+                  <div class="stat"><strong>4.4</strong><span>avg rating</span></div>
+                  <div class="stat"><strong>3</strong><span>clubs joined</span></div>
+                </div>
+              </div>
+              <div class="button-row" style="margin-top: 14px;">
+                <button class="primary-btn" data-action="open-profile">Open profile</button>
+              </div>
+            </section>
+          </div>
+
+          <aside class="stack right-rail">
+            <section class="card side-card">
+              <div class="card-header">
+                <div>
+                  <span class="eyebrow">Notifications</span>
+                  <h3>Recent updates</h3>
+                </div>
+              </div>
+              <div class="list" id="notifications"></div>
+            </section>
+
+            <section class="card side-card">
+              <div class="card-header">
+                <div>
+                  <span class="eyebrow">Achievements</span>
+                  <h3>Recently unlocked</h3>
+                </div>
+              </div>
+              <div class="badge-wrap" id="achievements"></div>
+            </section>
+
+            <section class="card side-card">
+              <div class="card-header">
+                <div>
+                  <span class="eyebrow">Admin</span>
+                  <h3>Tools</h3>
+                </div>
+              </div>
+              <div class="admin-grid">
+                <div class="admin-chip">Club settings</div>
+                <div class="admin-chip">Member management</div>
+                <div class="admin-chip">Roles</div>
+                <div class="admin-chip">Points</div>
+                <div class="admin-chip">Rewards</div>
+                <div class="admin-chip">Draws</div>
+              </div>
+            </section>
+          </aside>
+        </section>
+      </main>
+    </div>
+
+    <nav class="mobile-nav" id="mobile-nav">
+      <button class="nav-item active" data-section="home">Home</button>
+      <button class="nav-item" data-section="clubs">Clubs</button>
+      <button class="nav-item" data-section="reading">Reading</button>
+      <button class="nav-item" data-section="ranking">Rankings</button>
+      <button class="nav-item" data-section="profile">Profile</button>
+    </nav>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
