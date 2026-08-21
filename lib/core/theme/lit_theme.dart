@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LitColors {
-  static const background = Color(0xFFF8F7FF);
-  static const warmSurface = Color(0xFFFFEEDD);
-  static const softPeach = Color(0xFFFFD8BE);
-  static const softPeriwinkle = Color(0xFFB8B8FF);
-  static const primaryPurple = Color(0xFF9381FF);
+  static const background = Color(0xFFE5F8F0); // Honeydew
+  static const warmSurface = Color(0xFFECFFBE); // Tea Green
+  static const softPeach = Color(0xFFBCA4F5); // Mauve
+  static const softPeriwinkle = Color(0xFF81CFFF); // Sky Blue
+  static const primaryPurple = Color(0xFF4A69CE); // Royal Blue
   static const text = Color(0xFF2E294E);
   static const mutedText = Color(0xFF6B6680);
   static const border = Color(0x1A2E294E);

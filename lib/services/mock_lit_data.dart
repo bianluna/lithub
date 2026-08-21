@@ -4,8 +4,8 @@ import 'package:litapp/models/lit_models.dart';
 class MockLitData {
   static AppUser currentUser = AppUser(
     id: 'u1',
-    name: 'Bianca Vale',
-    handle: '@biancavale',
+    name: 'Bianca',
+    handle: '@bianca',
     avatarSeed: 'bianca',
     bio: 'Reads literary fiction, joins monthly club debates, and always circles back to stories with warm, strange hearts.',
     level: 12,
