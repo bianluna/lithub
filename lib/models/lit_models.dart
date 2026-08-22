@@ -27,6 +27,8 @@ extension ReadingStatusX on ReadingStatus {
 
 class AppUser {
   AppUser({
+    required this.email,
+    required this.password,
     required this.id,
     required this.name,
     required this.handle,
@@ -46,6 +48,8 @@ class AppUser {
   });
 
   final String id;
+  final String email;
+  final String password;
   final String name;
   final String handle;
   final String avatarSeed;

@@ -24,7 +24,7 @@ abstract class LitRepository {
   Reading? readingByBookId(String bookId);
   Reading? readingByClubId(String clubId);
 
-  void signIn();
+  bool signIn(String email, String password);
   void signOut();
   void updateReadingProgress(String readingId, {required int page, required int percent});
   void completeReading(String readingId);
@@ -39,8 +39,8 @@ abstract class LitRepository {
 class MockLitRepository extends ChangeNotifier implements LitRepository {
   MockLitRepository();
 
-  bool _signedIn = true;
-  final AppUser _currentUser = MockLitData.currentUser;
+  bool _signedIn = false;
+  AppUser _currentUser = MockLitData.currentUser;
   final List<AppUser> _users = MockLitData.users;
   final List<Book> _books = MockLitData.books;
   final List<Club> _clubs = MockLitData.clubs;
@@ -143,9 +143,16 @@ class MockLitRepository extends ChangeNotifier implements LitRepository {
   }
 
   @override
-  void signIn() {
-    _signedIn = true;
-    notifyListeners();
+  bool signIn(String email, String password) {
+    for (var user in _users) {
+      if (user.email == email && user.password == password) {
+        _currentUser = user;
+        _signedIn = true;
+        notifyListeners();
+        return true;
+      }
+    }
+    return false;
   }
 
   @override

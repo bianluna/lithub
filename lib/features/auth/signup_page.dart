@@ -19,7 +19,8 @@ class _SignupPageState extends ConsumerState<SignupPage> {
 
   Future<void> _handleSignup() async {
     final repo = ref.read(litRepositoryProvider);
-    repo.signIn(); // Mocking signup with signIn for now
+    // Mocking signup with signIn for now using a hardcoded default
+    repo.signIn('bianca@example.com', 'password123'); 
     context.go('/home');
   }
 

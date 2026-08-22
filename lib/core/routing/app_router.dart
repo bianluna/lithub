@@ -1,8 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:litapp/core/widgets/app_shell.dart';
-import 'package:litapp/services/lit_repository.dart'; // Fixed import path
-import 'package:litapp/features/auth/login_screen.dart'; // Kept only the valid auth screen
+import 'package:litapp/services/lit_repository.dart';
+import 'package:litapp/features/auth/login_page.dart';
+import 'package:litapp/features/auth/signup_page.dart';
 import 'package:litapp/features/books/book_detail_screen.dart';
 import 'package:litapp/features/calendar/calendar_screen.dart';
 import 'package:litapp/features/challenges/challenges_screen.dart';
@@ -28,8 +29,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       final location = state.uri.path;
       final loggedIn = repo.signedIn;
 
-      // Simplified auth route check
-      final isAuthRoute = location == '/login';
+      final isAuthRoute = location == '/login' || location == '/signup';
 
       if (!loggedIn && !isAuthRoute) return '/login';
       if (loggedIn && isAuthRoute) return '/home';
@@ -40,7 +40,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(
         path: '/login',
-        builder: (context, state) => const LoginScreen(),
+        builder: (context, state) => const LoginPage(),
+      ),
+      GoRoute(
+        path: '/signup',
+        builder: (context, state) => const SignupPage(),
       ),
       ShellRoute(
         builder: (context, state, child) =>

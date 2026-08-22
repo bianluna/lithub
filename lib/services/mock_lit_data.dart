@@ -4,6 +4,8 @@ import 'package:litapp/models/lit_models.dart';
 class MockLitData {
   static AppUser currentUser = AppUser(
     id: 'u1',
+    email: 'bianca@example.com',
+    password: 'password123',
     name: 'Bianca',
     handle: '@bianca',
     avatarSeed: 'bianca',
@@ -25,6 +27,8 @@ class MockLitData {
     currentUser,
     AppUser(
       id: 'u2',
+      email: 'luna@example.com',
+      password: 'password123',
       name: 'Luna March',
       handle: '@lunamarch',
       avatarSeed: 'luna',
@@ -43,6 +47,8 @@ class MockLitData {
     ),
     AppUser(
       id: 'u3',
+      email: 'clara@example.com',
+      password: 'password123',
       name: 'Clara Finch',
       handle: '@clarafinch',
       avatarSeed: 'clara',
@@ -61,6 +67,8 @@ class MockLitData {
     ),
     AppUser(
       id: 'u4',
+      email: 'milo@example.com',
+      password: 'password123',
       name: 'Milo Reed',
       handle: '@miloreed',
       avatarSeed: 'milo',
@@ -79,6 +87,8 @@ class MockLitData {
     ),
     AppUser(
       id: 'u5',
+      email: 'sofia@example.com',
+      password: 'password123',
       name: 'Sofia Vale',
       handle: '@sofiavale',
       avatarSeed: 'sofia',

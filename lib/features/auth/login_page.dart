@@ -20,8 +20,24 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   Future<void> _handleLogin() async {
     final repo = ref.read(litRepositoryProvider);
-    repo.signIn();
-    context.go('/home');
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+    
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter an email and password')),
+      );
+      return;
+    }
+    
+    final success = repo.signIn(email, password);
+    if (success) {
+      context.go('/home');
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Invalid email or password')),
+      );
+    }
   }
 
   @override
