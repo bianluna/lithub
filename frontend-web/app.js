@@ -373,7 +373,40 @@ function renderCalendar() {
 }
 
 function renderHome() {
-  // Intentionally keeps the homepage cards static; the visible data stays in sync with other sections.
+  const wrapper = document.getElementById("dynamic-readings-wrapper");
+  if (!wrapper) return;
+  
+  const activeReadings = state.readings.filter(r => state.clubs.some(c => c.id === r.clubId && c.joined));
+  
+  wrapper.innerHTML = activeReadings.map(reading => {
+    const book = state.bookMeta[reading.bookId] || { title: reading.title, author: reading.author, color: "purple" };
+    return `
+      <div class="card hero-card">
+        <div class="card-header">
+          <div>
+            <span class="eyebrow">Current reading</span>
+            <h3>${reading.title}</h3>
+          </div>
+          <span class="pill accent">${reading.progress}%</span>
+        </div>
+        <div class="book-row">
+          <div class="book-cover cover-${book.color}">
+            <span>${reading.title.split(',')[0]}</span>
+            <strong>${reading.author}</strong>
+          </div>
+          <div class="card-body">
+            <p class="muted">${reading.club}</p>
+            <div class="meta">${reading.currentPage} / ${reading.totalPages} pages • ${reading.deadline}</div>
+            <div class="progress"><div style="width:${reading.progress}%"></div></div>
+            <div class="button-row">
+              <button class="primary-btn" data-scroll="reading">Update progress</button>
+              <button class="secondary-btn" data-scroll="clubs">View club</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
 }
 
 function applyNavigation() {
@@ -476,10 +509,11 @@ document.addEventListener("input", (event) => {
   }
 });
 
-document.querySelectorAll("[data-scroll]").forEach((button) => {
-  button.addEventListener("click", () => {
+document.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-scroll]");
+  if (button) {
     document.querySelector(`[data-section-panel="${button.dataset.scroll}"]`)?.scrollIntoView({ behavior: "smooth" });
-  });
+  }
 });
 
 document.querySelectorAll("[data-section]").forEach((button) => {
@@ -499,3 +533,46 @@ el("#open-reading").addEventListener("click", () => {
 });
 
 renderAll();
+
+const mockUsers = [
+  { email: "bianca@example.com", password: "password123", name: "Bianca" },
+  { email: "luna@example.com", password: "password123", name: "Luna" },
+  { email: "clara@example.com", password: "password123", name: "Clara" },
+  { email: "milo@example.com", password: "password123", name: "Milo" },
+  { email: "sofia@example.com", password: "password123", name: "Sofia" }
+];
+
+function handleLogin() {
+  const email = el("#login-email").value.trim();
+  const password = el("#login-password").value;
+  const errorEl = el("#login-error");
+  
+  if (!email || !password) {
+    errorEl.textContent = "Please enter an email and password";
+    return;
+  }
+  
+  const user = mockUsers.find(u => u.email === email && u.password === password);
+  
+  if (user) {
+    el("#login-overlay").style.display = "none";
+    el("#app-shell").style.display = "flex"; 
+    
+    if (document.getElementById('welcome-text')) {
+      document.getElementById('welcome-text').textContent = `Good morning, ${user.name}`;
+    }
+    if (document.getElementById('profile-name')) {
+      document.getElementById('profile-name').textContent = user.name;
+    }
+    if (document.getElementById('profile-handle')) {
+      document.getElementById('profile-handle').textContent = `@${user.name.toLowerCase()}`;
+    }
+  } else {
+    errorEl.textContent = "Invalid email or password";
+  }
+}
+
+const loginBtn = el("#login-btn");
+if (loginBtn) {
+  loginBtn.addEventListener("click", handleLogin);
+}

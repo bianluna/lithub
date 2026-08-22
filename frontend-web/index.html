@@ -10,7 +10,27 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <div class="app-shell">
+        <div id="login-overlay" class="login-overlay">
+      <div class="login-card">
+        <div class="brand">
+          <div class="brand-mark">L</div>
+          <div>
+            <h1>LitApp</h1>
+            <p>Welcome Back</p>
+          </div>
+        </div>
+        <p class="login-subtitle">Log in to continue your reading journey.</p>
+        <div class="input-group">
+          <input type="email" id="login-email" placeholder="Email address" />
+        </div>
+        <div class="input-group">
+          <input type="password" id="login-password" placeholder="Password" />
+        </div>
+        <div id="login-error" class="login-error"></div>
+        <button id="login-btn" class="primary-btn">Log In</button>
+      </div>
+    </div>
+    <div class="app-shell" id="app-shell" style="display: none;">
       <aside class="sidebar">
         <div class="brand">
           <div class="brand-mark">L</div>
@@ -41,7 +61,7 @@
       <main class="main">
         <header class="topbar">
           <div>
-            <span class="eyebrow">Good morning, Bianca</span>
+            <span class="eyebrow" id="welcome-text">Good morning, LitApp Reader</span>
             <h2>Ready to read something new?</h2>
           </div>
           <div class="topbar-actions">
@@ -54,30 +74,7 @@
         </header>
 
         <section id="home-grid" class="hero-grid">
-          <div class="card hero-card">
-            <div class="card-header">
-              <div>
-                <span class="eyebrow">Current reading</span>
-                <h3>Tomorrow, and Tomorrow, and Tomorrow</h3>
-              </div>
-              <span class="pill accent">67%</span>
-            </div>
-            <div class="book-row">
-              <div class="book-cover cover-purple">
-                <span>Tomorrow</span>
-                <strong>Gabrielle Zevin</strong>
-              </div>
-              <div class="card-body">
-                <p class="muted">Lithappened</p>
-                <div class="meta">268 / 400 pages • 12 days remaining</div>
-                <div class="progress"><div style="width:67%"></div></div>
-                <div class="button-row">
-                  <button class="primary-btn" id="open-reading">Update progress</button>
-                  <button class="secondary-btn" data-scroll="clubs">View club</button>
-                </div>
-              </div>
-            </div>
-          </div>
+<div id="dynamic-readings-wrapper" style="display: contents;"></div>
 
           <div class="card hero-card">
             <div class="card-header">
@@ -210,14 +207,14 @@
               <div class="card-header">
                 <div>
                   <span class="eyebrow">Profile</span>
-                  <h3>Bianca Vale</h3>
+                  <h3 id="profile-name">LitApp Reader</h3>
                 </div>
               </div>
               <div class="profile-layout" data-action="open-profile">
                 <div class="profile-hero">
                   <div class="avatar big">BV</div>
                   <div>
-                    <p class="muted">@biancavale</p>
+                    <p class="muted" id="profile-handle">@reader</p>
                     <p>Level 12 • 1,240 / 1,500 XP • 880 points</p>
                     <div class="progress soft"><div style="width:83%"></div></div>
                   </div>

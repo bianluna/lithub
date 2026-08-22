@@ -15,9 +15,10 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final repo = ref.watch(litRepositoryProvider);
     final user = repo.currentUser;
-    final currentReading = repo.readings.first;
-    final currentBook = repo.bookById(currentReading.bookId)!;
-    final currentClub = repo.clubById(currentReading.clubId)!;
+    final activeReadings = repo.readings.where((r) {
+      final c = repo.clubById(r.clubId);
+      return c != null && c.isJoined && r.status == ReadingStatus.reading;
+    }).toList();
     final time = DateTime.now().hour < 12 ? 'morning' : DateTime.now().hour < 18 ? 'afternoon' : 'evening';
 
     return ListView(
@@ -36,7 +37,11 @@ class HomeScreen extends ConsumerWidget {
               spacing: 18,
               runSpacing: 18,
               children: [
-                SizedBox(width: wide ? constraints.maxWidth * .58 : constraints.maxWidth, child: _CurrentReadingCard(repo: repo, book: currentBook, reading: currentReading, club: currentClub)),
+                ...activeReadings.map((reading) {
+                   final book = repo.bookById(reading.bookId)!;
+                   final club = repo.clubById(reading.clubId)!;
+                   return SizedBox(width: wide ? constraints.maxWidth * .58 : constraints.maxWidth, child: _CurrentReadingCard(repo: repo, book: book, reading: reading, club: club));
+                }),
                 SizedBox(width: wide ? constraints.maxWidth * .38 : constraints.maxWidth, child: _ClubProgressCard(repo: repo)),
                 SizedBox(width: wide ? constraints.maxWidth * .38 : constraints.maxWidth, child: _RankingCard(repo: repo)),
                 SizedBox(width: wide ? constraints.maxWidth * .58 : constraints.maxWidth, child: _ChallengeCard(repo: repo)),
