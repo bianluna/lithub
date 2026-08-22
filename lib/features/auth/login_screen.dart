@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:litapp/core/providers.dart';
 import 'package:litapp/core/theme/lit_theme.dart';
@@ -49,7 +50,7 @@ class LoginScreen extends ConsumerWidget {
                               ],
                             ),
                             const SizedBox(height: 28),
-                            PrimaryButton(label: 'Enter LitApp', icon: Icons.auto_stories_rounded, onPressed: repo.signIn),
+                            PrimaryButton(label: 'Enter LitApp', icon: Icons.auto_stories_rounded, onPressed: () => context.go('/login')),
                           ],
                         ),
                       ),
