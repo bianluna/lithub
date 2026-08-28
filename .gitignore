@@ -7,3 +7,5 @@
 .vscode/
 build/
 *.iml
+# Widget Preview related
+.widget_preview/

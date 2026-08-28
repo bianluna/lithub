@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:litapp/core/theme/lit_theme.dart';
@@ -20,24 +21,39 @@ class AppCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final baseColor = color ?? LitColors.warmSurface;
+
+    final cardContent = Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.15), width: 1.5),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            baseColor.withValues(alpha: 0.35),
+            baseColor.withValues(alpha: 0.1),
+          ],
+        ),
+      ),
+      child: Padding(padding: padding, child: child),
+    );
+
     final card = Container(
       margin: margin,
       decoration: BoxDecoration(
-        gradient: color == null
-            ? null
-            : LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [color!.withOpacity(.95), Colors.white],
-              ),
-        color: color == null ? Colors.white : null,
         borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: LitColors.border),
         boxShadow: const [
-          BoxShadow(color: Color(0x12000000), blurRadius: 24, offset: Offset(0, 12)),
+          BoxShadow(color: Color(0x22000000), blurRadius: 24, offset: Offset(0, 12)),
         ],
       ),
-      child: Padding(padding: padding, child: child),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(28),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 16.0, sigmaY: 16.0),
+          child: cardContent,
+        ),
+      ),
     );
 
     if (onTap == null) return card;
@@ -89,8 +105,8 @@ class PrimaryButton extends StatelessWidget {
       onPressed: onPressed,
       label: label,
       icon: icon,
-      colors: const [LitColors.primaryPurple, LitColors.softPeriwinkle],
-      textColor: Colors.white,
+      colors: const [LitColors.primaryBlue, LitColors.brightCyan],
+      textColor: LitColors.background,
     );
   }
 }
@@ -108,7 +124,7 @@ class SecondaryButton extends StatelessWidget {
       onPressed: onPressed,
       label: label,
       icon: icon,
-      colors: const [LitColors.warmSurface, LitColors.softPeach],
+      colors: const [LitColors.warmSurface, LitColors.goldSparks],
       textColor: LitColors.text,
     );
   }
@@ -147,6 +163,7 @@ class _GradientActionButton extends StatelessWidget {
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (icon != null) ...[
                 Icon(icon, size: 18, color: textColor),
@@ -171,7 +188,7 @@ class SearchBarCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppCard(
-      color: const Color(0x66FFFFFF),
+      color: LitColors.warmSurface.withValues(alpha: 0.3),
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
       child: Row(
         children: [
@@ -213,7 +230,7 @@ class AvatarCircle extends StatelessWidget {
       height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        gradient: LinearGradient(colors: [color.withOpacity(.95), color.withOpacity(.55)]),
+        gradient: LinearGradient(colors: [color.withValues(alpha: .95), color.withValues(alpha: .55)]),
       ),
       child: Center(
         child: Text(
@@ -236,8 +253,9 @@ class ColorPill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [color.withOpacity(.22), color.withOpacity(.08)]),
+        gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [color.withValues(alpha: .42), color.withValues(alpha: .18)]),
         borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
       ),
       child: Text(label, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: .4)),
     );
@@ -245,7 +263,7 @@ class ColorPill extends StatelessWidget {
 }
 
 class ProgressBar extends StatelessWidget {
-  const ProgressBar({super.key, required this.progress, this.height = 10, this.color = LitColors.primaryPurple, this.backgroundColor = const Color(0xFFEDEAFB)});
+  const ProgressBar({super.key, required this.progress, this.height = 10, this.color = LitColors.primaryBlue, this.backgroundColor = const Color(0x33FFFFFF)});
 
   final double progress;
   final double height;
@@ -267,7 +285,7 @@ class ProgressBar extends StatelessWidget {
 }
 
 class StatCard extends StatelessWidget {
-  const StatCard({super.key, required this.label, required this.value, this.icon, this.color = LitColors.softPeriwinkle});
+  const StatCard({super.key, required this.label, required this.value, this.icon, this.color = LitColors.brightCyan});
 
   final String label;
   final String value;
@@ -276,12 +294,17 @@ class StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppCard(
-      color: color.withOpacity(.22),
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.04), // Almost non opacity background
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: color.withValues(alpha: 0.12), width: 1),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (icon != null) Icon(icon, color: LitColors.text),
+          if (icon != null) Icon(icon, color: color), // Changed icon color to perfectly match the accent color
           const SizedBox(height: 20),
           Text(value, style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800)),
           const SizedBox(height: 6),
@@ -303,7 +326,7 @@ class EmptyStateCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppCard(
-      color: LitColors.warmSurface.withOpacity(.65),
+      color: LitColors.warmSurface,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -311,10 +334,10 @@ class EmptyStateCard extends StatelessWidget {
             width: 78,
             height: 78,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(.6),
+              color: Colors.white.withValues(alpha: .1),
               borderRadius: BorderRadius.circular(26),
             ),
-            child: const Icon(Icons.auto_stories_rounded, size: 38, color: LitColors.primaryPurple),
+            child: const Icon(Icons.auto_stories_rounded, size: 38, color: LitColors.primaryBlue),
           ),
           const SizedBox(height: 18),
           Text(title, style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800)),
@@ -339,10 +362,10 @@ class ErrorStateCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppCard(
-      color: LitColors.warmSurface.withOpacity(.7),
+      color: LitColors.warmSurface,
       child: Row(
         children: [
-          const Icon(Icons.waving_hand_rounded, color: LitColors.primaryPurple),
+          const Icon(Icons.waving_hand_rounded, color: LitColors.primaryBlue),
           const SizedBox(width: 12),
           Expanded(child: Text(message, style: Theme.of(context).textTheme.bodyMedium)),
           if (onRetry != null) SecondaryButton(label: 'Retry', onPressed: onRetry!),
@@ -372,8 +395,9 @@ class MiniBarChart extends StatelessWidget {
                   child: Container(
                     height: 120 * (value / maxValue).clamp(0.12, 1),
                     decoration: BoxDecoration(
-                      color: LitColors.primaryPurple.withOpacity(.85),
+                      gradient: LinearGradient(colors: [LitColors.primaryBlue.withValues(alpha: .6), LitColors.primaryBlue.withValues(alpha: .2)]),
                       borderRadius: BorderRadius.circular(999),
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
                     ),
                   ),
                 ),
@@ -406,7 +430,8 @@ class MilestoneTimeline extends StatelessWidget {
                   height: 14,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: item.$2 ? LitColors.primaryPurple : LitColors.softPeriwinkle.withOpacity(.45),
+                    boxShadow: item.$2 ? [BoxShadow(color: LitColors.primaryBlue.withValues(alpha: 0.5), blurRadius: 6)] : null,
+                    color: item.$2 ? LitColors.primaryBlue : LitColors.brightCyan.withValues(alpha: .3),
                   ),
                 ),
                 if (!isLast)
@@ -414,7 +439,7 @@ class MilestoneTimeline extends StatelessWidget {
                     width: 2,
                     height: 36,
                     margin: const EdgeInsets.symmetric(vertical: 4),
-                    color: LitColors.border,
+                    color: Colors.white.withValues(alpha: 0.1),
                   ),
               ],
             ),
@@ -443,13 +468,13 @@ class SelectableChip extends StatelessWidget {
       label: Text(label),
       selected: selected,
       onSelected: onTap == null ? null : (_) => onTap!(),
-      selectedColor: LitColors.primaryPurple.withOpacity(.18),
-      backgroundColor: Colors.white,
+      selectedColor: LitColors.primaryBlue.withValues(alpha: .25),
+      backgroundColor: Colors.white.withValues(alpha: 0.05),
       labelStyle: TextStyle(
         fontWeight: FontWeight.w700,
-        color: selected ? LitColors.primaryPurple : LitColors.text,
+        color: selected ? LitColors.primaryBlue : LitColors.text,
       ),
-      side: const BorderSide(color: LitColors.border),
+      side: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
     );
   }
@@ -468,9 +493,9 @@ class CoverArt extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final palette = [
-      LitColors.primaryPurple.withOpacity(.9),
-      LitColors.softPeriwinkle.withOpacity(.95),
-      LitColors.softPeach.withOpacity(.9),
+      LitColors.primaryBlue.withValues(alpha: .9),
+      LitColors.brightCyan.withValues(alpha: .95),
+      LitColors.goldSparks.withValues(alpha: .9),
     ];
     final index = seed.hashCode.abs() % palette.length;
     return Container(
@@ -478,8 +503,8 @@ class CoverArt extends StatelessWidget {
       height: height,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(26),
-        gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [palette[index], accentColor.withOpacity(.88)]),
-        boxShadow: const [BoxShadow(color: Color(0x18000000), blurRadius: 20, offset: Offset(0, 10))],
+        gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [palette[index], accentColor.withValues(alpha: .88)]),
+        boxShadow: const [BoxShadow(color: Color(0x33000000), blurRadius: 20, offset: Offset(0, 10))],
       ),
       child: Stack(
         children: [
@@ -489,7 +514,7 @@ class CoverArt extends StatelessWidget {
             child: Container(
               width: 74,
               height: 74,
-              decoration: BoxDecoration(color: Colors.white.withOpacity(.15), shape: BoxShape.circle),
+              decoration: BoxDecoration(color: Colors.white.withValues(alpha: .15), shape: BoxShape.circle),
             ),
           ),
           Positioned(
@@ -511,7 +536,7 @@ class CoverArt extends StatelessWidget {
             bottom: 16,
             child: Text(
               subtitle,
-              style: Theme.of(context).textTheme.labelMedium?.copyWith(color: Colors.white.withOpacity(.9), height: 1.2),
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(color: Colors.white.withValues(alpha: .9), height: 1.2),
             ),
           ),
         ],
@@ -523,9 +548,84 @@ class CoverArt extends StatelessWidget {
 Color seedColor(String seed) {
   final index = seed.hashCode.abs() % 4;
   return switch (index) {
-    0 => LitColors.primaryPurple,
-    1 => LitColors.softPeriwinkle,
-    2 => LitColors.softPeach,
-    _ => LitColors.softPeriwinkle,
+    0 => LitColors.primaryBlue,
+    1 => LitColors.brightCyan,
+    2 => LitColors.goldSparks,
+    _ => LitColors.brightCyan,
   };
+}
+class LitBottomNavItem {
+  final IconData icon;
+  final String label;
+
+  const LitBottomNavItem({required this.icon, required this.label});
+}
+
+class LitBottomNavigation extends StatelessWidget {
+  const LitBottomNavigation({
+    super.key,
+    required this.selectedIndex,
+    required this.onDestinationSelected,
+    required this.destinations,
+  });
+
+  final int selectedIndex;
+  final ValueChanged<int> onDestinationSelected;
+  final List<LitBottomNavItem> destinations;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(left: 16, right: 16, bottom: 24, top: 0),
+      child: AppCard(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        color: LitColors.warmSurface.withValues(alpha: 0.4),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: List.generate(destinations.length, (index) {
+            final isSelected = index == selectedIndex;
+            final item = destinations[index];
+            return GestureDetector(
+              onTap: () => onDestinationSelected(index),
+              behavior: HitTestBehavior.opaque,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeOutCubic,
+                padding: EdgeInsets.symmetric(
+                  horizontal: isSelected ? 16 : 12,
+                  vertical: 10,
+                ),
+                decoration: BoxDecoration(
+                  color: isSelected ? LitColors.primaryBlue.withValues(alpha: 0.25) : Colors.transparent,
+                  borderRadius: BorderRadius.circular(16),
+                  border: isSelected ? Border.all(color: LitColors.brightCyan.withValues(alpha: 0.3), width: 1) : Border.all(color: Colors.transparent, width: 1),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      item.icon,
+                      color: isSelected ? LitColors.brightCyan : LitColors.mutedText,
+                      size: 24,
+                    ),
+                    if (isSelected) ...[
+                      const SizedBox(width: 8),
+                      Text(
+                        item.label,
+                        style: const TextStyle(
+                          color: LitColors.text,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ]
+                  ],
+                ),
+              ),
+            );
+          }),
+        ),
+      ),
+    );
+  }
 }

@@ -15,33 +15,54 @@ class NotificationsScreen extends ConsumerWidget {
     final notifications = repo.notifications;
 
     return ListView(
-      padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
+      padding: const EdgeInsets.fromLTRB(24, 24, 24, 140),
       children: [
         Row(
           children: [
-            Expanded(child: Text('Notifications', style: Theme.of(context).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w900))),
-            SecondaryButton(label: 'Mark all read', icon: Icons.done_all_rounded, onPressed: repo.markAllNotificationsRead),
+            Expanded(
+                child: Text('Notifications',
+                    style: Theme.of(context)
+                        .textTheme
+                        .displaySmall
+                        ?.copyWith(fontWeight: FontWeight.w900))),
+            SecondaryButton(
+                label: 'Mark all read',
+                icon: Icons.done_all_rounded,
+                onPressed: repo.markAllNotificationsRead),
           ],
         ),
         const SizedBox(height: 8),
-        Text('Compact updates from clubs, reading, rewards, and achievements.', style: Theme.of(context).textTheme.titleLarge?.copyWith(color: LitColors.mutedText)),
+        Text('Compact updates from clubs, reading, rewards, and achievements.',
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(color: LitColors.mutedText)),
         const SizedBox(height: 18),
         if (notifications.isEmpty)
-          const EmptyStateCard(title: 'No notifications yet', message: 'You have not received any updates.', actionLabel: 'Refresh', onAction: null)
+          const EmptyStateCard(
+              title: 'No notifications yet',
+              message: 'You have not received any updates.',
+              actionLabel: 'Refresh',
+              onAction: null)
         else
           ...notifications.map(
             (n) => Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: AppCard(
-                color: n.unread ? LitColors.primaryPurple.withOpacity(.07) : Colors.white,
+                color: n.unread
+                    ? LitColors.primaryPurple.withOpacity(.07)
+                    : Colors.white,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
                       width: 44,
                       height: 44,
-                      decoration: BoxDecoration(color: LitColors.softPeriwinkle.withOpacity(.25), borderRadius: BorderRadius.circular(16)),
-                      child: Icon(_iconForType(n.type), color: LitColors.primaryPurple),
+                      decoration: BoxDecoration(
+                          color: LitColors.softPeriwinkle.withOpacity(.25),
+                          borderRadius: BorderRadius.circular(16)),
+                      child: Icon(_iconForType(n.type),
+                          color: LitColors.primaryPurple),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
@@ -50,14 +71,30 @@ class NotificationsScreen extends ConsumerWidget {
                         children: [
                           Row(
                             children: [
-                              Expanded(child: Text(n.title, style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800))),
-                              if (n.unread) const ColorPill(label: 'New', color: LitColors.softPeach),
+                              Expanded(
+                                  child: Text(n.title,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge
+                                          ?.copyWith(
+                                              fontWeight: FontWeight.w800))),
+                              if (n.unread)
+                                const ColorPill(
+                                    label: 'New', color: LitColors.softPeach),
                             ],
                           ),
                           const SizedBox(height: 4),
-                          Text(n.body, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: LitColors.mutedText)),
+                          Text(n.body,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(color: LitColors.mutedText)),
                           const SizedBox(height: 8),
-                          Text(DateFormat('d MMM • HH:mm').format(n.dateTime), style: Theme.of(context).textTheme.bodySmall?.copyWith(color: LitColors.mutedText)),
+                          Text(DateFormat('d MMM • HH:mm').format(n.dateTime),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(color: LitColors.mutedText)),
                         ],
                       ),
                     ),

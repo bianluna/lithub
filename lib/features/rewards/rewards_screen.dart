@@ -13,24 +13,40 @@ class RewardsScreen extends ConsumerWidget {
     final repo = ref.watch(litRepositoryProvider);
 
     return ListView(
-      padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
+      padding: const EdgeInsets.fromLTRB(24, 24, 24, 140),
       children: [
         Row(
           children: [
-            Expanded(child: Text('Rewards', style: Theme.of(context).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w900))),
+            Expanded(
+                child: Text('Rewards',
+                    style: Theme.of(context)
+                        .textTheme
+                        .displaySmall
+                        ?.copyWith(fontWeight: FontWeight.w900))),
             AppCard(
               color: LitColors.primaryPurple.withOpacity(.12),
-              child: Text('${repo.currentUser.points} points', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w900)),
+              child: Text('${repo.currentUser.points} points',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge
+                      ?.copyWith(fontWeight: FontWeight.w900)),
             ),
           ],
         ),
         const SizedBox(height: 8),
-        Text('Redeem points for non-monetary rewards.', style: Theme.of(context).textTheme.titleLarge?.copyWith(color: LitColors.mutedText)),
+        Text('Redeem points for non-monetary rewards.',
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(color: LitColors.mutedText)),
         const SizedBox(height: 18),
         Wrap(
           spacing: 18,
           runSpacing: 18,
-          children: repo.rewards.map((reward) => SizedBox(width: 360, child: _RewardCard(rewardId: reward.id))).toList(),
+          children: repo.rewards
+              .map((reward) =>
+                  SizedBox(width: 360, child: _RewardCard(rewardId: reward.id)))
+              .toList(),
         ),
       ],
     );
@@ -48,7 +64,9 @@ class _RewardCard extends ConsumerWidget {
     final enough = repo.currentUser.points >= reward.cost;
     final available = reward.availability != RewardAvailability.soldOut;
     return AppCard(
-      color: reward.availability == RewardAvailability.soldOut ? LitColors.background : Colors.white,
+      color: reward.availability == RewardAvailability.soldOut
+          ? LitColors.background
+          : Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -57,28 +75,51 @@ class _RewardCard extends ConsumerWidget {
               Container(
                 width: 56,
                 height: 56,
-                decoration: BoxDecoration(color: LitColors.softPeriwinkle.withOpacity(.25), borderRadius: BorderRadius.circular(18)),
-                child: Center(child: Text(reward.icon, style: const TextStyle(fontSize: 24))),
+                decoration: BoxDecoration(
+                    color: LitColors.softPeriwinkle.withOpacity(.25),
+                    borderRadius: BorderRadius.circular(18)),
+                child: Center(
+                    child: Text(reward.icon,
+                        style: const TextStyle(fontSize: 24))),
               ),
               const SizedBox(width: 12),
-              Expanded(child: Text(reward.name, style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800))),
+              Expanded(
+                  child: Text(reward.name,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(fontWeight: FontWeight.w800))),
             ],
           ),
           const SizedBox(height: 12),
-          Text(reward.description, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: LitColors.mutedText)),
+          Text(reward.description,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.copyWith(color: LitColors.mutedText)),
           const SizedBox(height: 14),
           Row(
             children: [
-              ColorPill(label: '${reward.cost} points', color: LitColors.primaryPurple),
+              ColorPill(
+                  label: '${reward.cost} points',
+                  color: LitColors.primaryPurple),
               const SizedBox(width: 10),
-              ColorPill(label: reward.availability.name.toUpperCase(), color: LitColors.softPeach),
+              ColorPill(
+                  label: reward.availability.name.toUpperCase(),
+                  color: LitColors.softPeach),
             ],
           ),
           const SizedBox(height: 14),
           PrimaryButton(
-            label: available && enough ? 'Redeem reward' : available ? 'Need more points' : 'Unavailable',
+            label: available && enough
+                ? 'Redeem reward'
+                : available
+                    ? 'Need more points'
+                    : 'Unavailable',
             icon: Icons.card_giftcard_rounded,
-            onPressed: available && enough ? () => ref.read(litRepositoryProvider).redeemReward(reward.id) : null,
+            onPressed: available && enough
+                ? () => ref.read(litRepositoryProvider).redeemReward(reward.id)
+                : null,
           ),
         ],
       ),

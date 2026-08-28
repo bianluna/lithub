@@ -14,50 +14,102 @@ class RankingScreen extends ConsumerWidget {
     return DefaultTabController(
       length: 3,
       child: ListView(
-        padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
+        padding: const EdgeInsets.fromLTRB(24, 24, 24, 140),
         children: [
-          Text('Rankings', style: Theme.of(context).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w900)),
-          const SizedBox(height: 8),
-          Text('Monthly, yearly, and all-time leaderboards with a soft purple edge.', style: Theme.of(context).textTheme.titleLarge?.copyWith(color: LitColors.mutedText)),
-          const SizedBox(height: 18),
-          const TabBar(
-            labelColor: LitColors.primaryPurple,
-            unselectedLabelColor: LitColors.mutedText,
-            indicatorColor: LitColors.primaryPurple,
-            tabs: [
-              Tab(text: 'MONTH'),
-              Tab(text: 'YEAR'),
-              Tab(text: 'ALL TIME'),
+          Row(
+            children: [
+              Expanded(
+                child: Text('Hall of Fame 🏆',
+                    style: Theme.of(context)
+                        .textTheme
+                        .displaySmall
+                        ?.copyWith(fontWeight: FontWeight.w900)),
+              ),
             ],
           ),
+          const SizedBox(height: 8),
+          Text('Monthly, yearly, and all-time mystical leaderboards.',
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge
+                  ?.copyWith(color: LitColors.mutedText)),
           const SizedBox(height: 18),
           AppCard(
-            color: LitColors.warmSurface.withOpacity(.7),
+            padding: EdgeInsets.zero,
+            color: LitColors.warmSurface,
+            child: const TabBar(
+              dividerColor: Colors.transparent,
+              labelColor: LitColors.goldSparks,
+              unselectedLabelColor: LitColors.mutedText,
+              indicatorColor: LitColors.goldSparks,
+              indicatorSize: TabBarIndicatorSize.tab,
+              indicator: BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: LitColors.goldSparks, width: 3)),
+              ),
+              tabs: [
+                Tab(text: 'MOON CYCLE'),
+                Tab(text: 'SOLAR YEAR'),
+                Tab(text: 'ALL TIME'),
+              ],
+            ),
+          ),
+          const SizedBox(height: 24),
+          AppCard(
+            color: LitColors.primaryBlue,
             child: Row(
               children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: LitColors.goldSparks.withOpacity(0.2),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.auto_awesome,
+                      color: LitColors.goldSparks, size: 28),
+                ),
+                const SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Your position', style: Theme.of(context).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w800)),
-                      const SizedBox(height: 8),
-                      Text('#3 this month', style: Theme.of(context).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w900)),
+                      Text('Your position',
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelLarge
+                              ?.copyWith(
+                                  fontWeight: FontWeight.w800,
+                                  color: LitColors.goldSparks)),
+                      const SizedBox(height: 4),
+                      Text('#3 this cycle',
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium
+                              ?.copyWith(fontWeight: FontWeight.w900)),
                     ],
                   ),
                 ),
-                const SizedBox(width: 12),
-                ColorPill(label: '${repo.currentUser.level} level', color: LitColors.primaryPurple),
+                ColorPill(
+                    label: 'Lvl ${repo.currentUser.level}',
+                    color: LitColors.brightCyan),
               ],
             ),
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 24),
           SizedBox(
-            height: 460,
+            height: 650, // Expanded height so it frames nicely
             child: TabBarView(
+              clipBehavior: Clip.none,
               children: [
-                _RankingList(entries: repo.rankingsMonth, currentUserId: repo.currentUser.id),
-                _RankingList(entries: repo.rankingsYear, currentUserId: repo.currentUser.id),
-                _RankingList(entries: repo.rankingsAllTime, currentUserId: repo.currentUser.id),
+                _RankingList(
+                    entries: repo.rankingsMonth,
+                    currentUserId: repo.currentUser.id),
+                _RankingList(
+                    entries: repo.rankingsYear,
+                    currentUserId: repo.currentUser.id),
+                _RankingList(
+                    entries: repo.rankingsAllTime,
+                    currentUserId: repo.currentUser.id),
               ],
             ),
           ),
@@ -75,41 +127,122 @@ class _RankingList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
+    return ListView.builder(
+      padding: EdgeInsets.zero,
       itemCount: entries.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 12),
       itemBuilder: (context, index) {
         final entry = entries[index];
         final current = entry.userId == currentUserId;
-        final top = entry.rank <= 3;
-        return AppCard(
-          color: top ? LitColors.primaryPurple.withOpacity(.08) : Colors.white,
-          child: Row(
-            children: [
-              Text('#${entry.rank}', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w900, color: top ? LitColors.primaryPurple : LitColors.text)),
-              const SizedBox(width: 14),
-              AvatarCircle(seed: entry.avatarSeed, size: top ? 52 : 42),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(entry.name, style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800)),
-                        if (current) ...[
-                          const SizedBox(width: 8),
-                          const ColorPill(label: 'You', color: LitColors.softPeach),
+
+        final isFirst = entry.rank == 1;
+        final isSecond = entry.rank == 2;
+        final isThird = entry.rank == 3;
+        final isTop = isFirst || isSecond || isThird;
+
+        Color rankColor = LitColors.text;
+        if (isFirst)
+          rankColor = LitColors.goldSparks;
+        else if (isSecond)
+          rankColor = const Color(0xFFE2E8F0); // Mithril/Silver
+        else if (isThird) rankColor = const Color(0xFFCD7F32); // Bronze
+
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 14),
+          child: AppCard(
+            color: isFirst
+                ? LitColors.goldSparks.withOpacity(0.2)
+                : current
+                    ? LitColors.primaryBlue.withOpacity(0.2)
+                    : null,
+            padding: const EdgeInsets.fromLTRB(16, 20, 20, 20),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 48,
+                  child: Center(
+                    child: isTop
+                        ? Icon(
+                            isFirst
+                                ? Icons.emoji_events_rounded
+                                : Icons.military_tech_rounded,
+                            color: rankColor,
+                            size: isFirst ? 36 : 30)
+                        : Text('#${entry.rank}',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(
+                                    fontWeight: FontWeight.w900,
+                                    color: LitColors.mutedText)),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                AvatarCircle(seed: entry.avatarSeed, size: isTop ? 56 : 46),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              entry.name,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge
+                                  ?.copyWith(
+                                      fontWeight: isTop
+                                          ? FontWeight.w900
+                                          : FontWeight.w700,
+                                      color: isFirst
+                                          ? LitColors.goldSparks
+                                          : LitColors.text),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          if (current) ...[
+                            const SizedBox(width: 8),
+                            const ColorPill(
+                                label: 'You', color: LitColors.brightCyan),
+                          ],
                         ],
-                      ],
-                    ),
-                    const SizedBox(height: 3),
-                    Text('Level ${entry.level}', style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: LitColors.mutedText)),
+                      ),
+                      const SizedBox(height: 4),
+                      Row(children: [
+                        const Icon(Icons.star_rounded,
+                            size: 14, color: LitColors.goldSparks),
+                        const SizedBox(width: 4),
+                        Text('Level ${entry.level}',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                    color: LitColors.mutedText,
+                                    fontWeight: FontWeight.w700)),
+                      ])
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text('${entry.points}',
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge
+                            ?.copyWith(fontWeight: FontWeight.w900)),
+                    const SizedBox(height: 2),
+                    Text('mana',
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                            color: LitColors.goldSparks,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 0.5)),
                   ],
                 ),
-              ),
-              Text('${entry.points} pts', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w900)),
-            ],
+              ],
+            ),
           ),
         );
       },

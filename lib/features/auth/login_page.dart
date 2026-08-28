@@ -22,14 +22,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final repo = ref.read(litRepositoryProvider);
     final email = _emailController.text.trim();
     final password = _passwordController.text;
-    
+
     if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please enter an email and password')),
       );
       return;
     }
-    
+
     final success = repo.signIn(email, password);
     if (success) {
       context.go('/home');
